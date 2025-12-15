@@ -1,0 +1,135 @@
+{{ 'section-mission-statement.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }} .mission-statement__background {
+    background-color: {{ section.settings.background_color }};
+    transform: skewY({{ section.settings.slant_angle }}deg);
+  }
+{%- endstyle -%}
+
+<section class="mission-statement section-{{ section.id }} color-{{ section.settings.color_scheme }}">
+  <div class="mission-statement__background"></div>
+  <div class="mission-statement__content page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mission-statement__heading {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="mission-statement__text rte">
+        {{ section.settings.text }}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a
+        {% if section.settings.button_link != blank %}
+          href="{{ section.settings.button_link }}"
+        {% endif %}
+        class="button {% if section.settings.button_style_secondary %}button--secondary{% else %}button--primary{% endif %}"
+        {% if section.settings.button_link == blank %}
+          role="link" aria-disabled="true"
+        {% endif %}
+      >
+        {{ section.settings.button_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mission Statement",
+  "tag": "section",
+  "class": "section-mission-statement",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "<em>THE NU MVMT MISSION</em>",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>NU MVMT Health and Athletics is dedicated to bridging the gap in physical wellness through tailored care and recovery services.</p><p>Our team of Health Professionals specializes in resolving overlooked or undiagnosed conditions. Whether you're an office worker, an athlete, or someone seeking personalized care, visit our Greater Vancouver clinic for comprehensive support and effective solutions.</p>",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Learn More",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_style_secondary",
+      "default": false,
+      "label": "Use secondary button style"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "default": "#D9D9D9",
+      "label": "Slant background color"
+    },
+    {
+      "type": "range",
+      "id": "slant_angle",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "°",
+      "label": "Slant angle",
+      "default": -3
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mission Statement"
+    }
+  ]
+}
+{% endschema %}
