@@ -1,0 +1,171 @@
+/* Booking Cards Section - Mobile First */
+
+.booking-cards {
+  padding: 4rem 0;
+}
+
+.booking-cards__container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Header */
+.booking-cards__header {
+  text-align: center;
+  max-width: var(--header-max-width, 70rem);
+  margin: 0 auto;
+}
+
+.booking-cards__heading {
+  margin: 0 0 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.booking-cards__description {
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.booking-cards__subtext {
+  margin: 0;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Cards Grid - Mobile First */
+.booking-cards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media screen and (min-width: 550px) {
+  .booking-cards__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .booking-cards__grid--3-items {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* 2 cards stay at 2 columns */
+  .booking-cards__grid--2-items {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+  
+  /* 1 card centers */
+  .booking-cards__grid--1-items {
+    grid-template-columns: 1fr;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+}
+
+/* Individual Card */
+.booking-card {
+  position: relative;
+  display: block;
+  border-radius: 1rem;
+  overflow: hidden;
+  aspect-ratio: 225 / 328;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.booking-card:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 4px;
+}
+
+/* Card Image */
+.booking-card__image-wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.booking-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.booking-card__image.placeholder-svg {
+  background-color: rgba(var(--color-foreground), 0.1);
+}
+
+/* Gradient Overlay */
+.booking-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 40%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  pointer-events: none;
+}
+
+/* Card Content */
+.booking-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  text-align: center;
+}
+
+.booking-card__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (min-width: 750px) {
+  .booking-cards {
+    padding: 6rem 0;
+  }
+
+  .booking-cards__container {
+    gap: 4rem;
+  }
+
+  .booking-card__title {
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .booking-card__title {
+    font-size: 2rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .booking-card {
+    transition: none;
+  }
+  
+  .booking-card:hover {
+    transform: none;
+  }
+}
