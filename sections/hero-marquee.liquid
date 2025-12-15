@@ -1,0 +1,305 @@
+{{ 'section-hero-marquee.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }} {
+    --marquee-speed: {{ section.settings.marquee_speed }}s;
+    --logo-width-desktop: {{ section.settings.logo_width_desktop }}px;
+    --logo-width-mobile: {{ section.settings.logo_width_mobile }}px;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign left_column_blocks = ''
+  assign right_column_blocks = ''
+  for block in section.blocks
+    assign block_index_mod = forloop.index | modulo: 2
+    if block_index_mod == 1
+      assign left_column_blocks = left_column_blocks | append: block.id | append: ','
+    else
+      assign right_column_blocks = right_column_blocks | append: block.id | append: ','
+    endif
+  endfor
+  assign left_column_blocks = left_column_blocks | split: ','
+  assign right_column_blocks = right_column_blocks | split: ','
+-%}
+
+<section class="hero-marquee section-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+  <div class="hero-marquee__container page-width">
+    <div class="hero-marquee__content">
+      {%- if section.settings.logo_image != blank -%}
+        <div class="hero-marquee__logo">
+          {{
+            section.settings.logo_image
+            | image_url: width: 800
+            | image_tag:
+              loading: 'eager',
+              widths: '200, 300, 400, 500, 600, 800',
+              sizes: '(max-width: 749px) var(--logo-width-mobile), var(--logo-width-desktop)',
+              class: 'hero-marquee__logo-image'
+          }}
+        </div>
+      {%- elsif section.settings.heading != blank -%}
+        <h1 class="hero-marquee__heading {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="hero-marquee__text rte">
+          {{ section.settings.text }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a
+          {% if section.settings.button_link != blank %}
+            href="{{ section.settings.button_link }}"
+          {% endif %}
+          class="button {% if section.settings.button_style_secondary %}button--secondary{% else %}button--primary{% endif %}"
+          {% if section.settings.button_link == blank %}
+            role="link" aria-disabled="true"
+          {% endif %}
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="hero-marquee__marquee-wrapper">
+        <div class="hero-marquee__marquee-mask">
+          {%- comment -%} Desktop: Two vertical columns {%- endcomment -%}
+          <div class="hero-marquee__marquee-columns">
+            {%- comment -%} Left column - scrolls down {%- endcomment -%}
+            <div class="hero-marquee__column hero-marquee__column--down">
+              <div class="hero-marquee__track">
+                {%- for block in section.blocks -%}
+                  {%- assign block_index_mod = forloop.index | modulo: 2 -%}
+                  {%- if block_index_mod == 1 -%}
+                    <div class="hero-marquee__item" {{ block.shopify_attributes }}>
+                      {%- render 'hero-marquee-block', block: block -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+              <div class="hero-marquee__track" aria-hidden="true">
+                {%- for block in section.blocks -%}
+                  {%- assign block_index_mod = forloop.index | modulo: 2 -%}
+                  {%- if block_index_mod == 1 -%}
+                    <div class="hero-marquee__item">
+                      {%- render 'hero-marquee-block', block: block -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+
+            {%- comment -%} Right column - scrolls up {%- endcomment -%}
+            <div class="hero-marquee__column hero-marquee__column--up">
+              <div class="hero-marquee__track">
+                {%- for block in section.blocks -%}
+                  {%- assign block_index_mod = forloop.index | modulo: 2 -%}
+                  {%- if block_index_mod == 0 -%}
+                    <div class="hero-marquee__item" {{ block.shopify_attributes }}>
+                      {%- render 'hero-marquee-block', block: block -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+              <div class="hero-marquee__track" aria-hidden="true">
+                {%- for block in section.blocks -%}
+                  {%- assign block_index_mod = forloop.index | modulo: 2 -%}
+                  {%- if block_index_mod == 0 -%}
+                    <div class="hero-marquee__item">
+                      {%- render 'hero-marquee-block', block: block -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+
+          {%- comment -%} Mobile: Single horizontal row {%- endcomment -%}
+          <div class="hero-marquee__marquee-horizontal">
+            <div class="hero-marquee__track-horizontal">
+              {%- for block in section.blocks -%}
+                <div class="hero-marquee__item" {{ block.shopify_attributes }}>
+                  {%- render 'hero-marquee-block', block: block, mobile: true -%}
+                </div>
+              {%- endfor -%}
+            </div>
+            {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+            <div class="hero-marquee__track-horizontal" aria-hidden="true">
+              {%- for block in section.blocks -%}
+                <div class="hero-marquee__item">
+                  {%- render 'hero-marquee-block', block: block, mobile: true -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Marquee",
+  "tag": "section",
+  "class": "section-hero-marquee",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image",
+      "info": "Replaces the heading text when set"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_desktop",
+      "min": 100,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width (desktop)",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width (mobile)",
+      "default": 250
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "NU MVMT",
+      "label": "Heading",
+      "info": "Used if no logo image is set"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>At NU MVMT, we bridge the gap between Clinical Care and Fitness to help you move, feel, and live your best. Our Multidisciplinary team offers expert Physiotherapy, Chiropractic, RMT, Acupuncture, Kinesiology, Pilates, Personal Training, and much more — all under one roof!</p>",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Learn More",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_style_secondary",
+      "default": false,
+      "label": "Use secondary button style"
+    },
+    {
+      "type": "header",
+      "content": "Marquee settings"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Marquee speed",
+      "default": 25,
+      "info": "Time in seconds for one complete cycle. Higher = slower."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "External video URL",
+          "info": "Used if no Shopify-hosted video is selected"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Marquee",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+{%- comment -%}
+  Hero Marquee Block
+  Renders an image or video block for the hero marquee section.
+  
+  Accepts:
+  - block: {Object} Block object
+  - mobile: {Boolean} Optional. If true, uses smaller image sizes for mobile.
+{%- endcomment -%}
+
+{%- liquid
+  if mobile
+    assign image_width = 400
+    assign image_widths = '200, 300, 400'
+    assign image_sizes = '40vw'
+  else
+    assign image_width = 600
+    assign image_widths = '300, 400, 500, 600'
+    assign image_sizes = '(max-width: 749px) 40vw, 300px'
+  endif
+-%}
+
+<div class="hero-marquee__item-inner">
+  {%- if block.type == 'image' -%}
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: image_width
+        | image_tag:
+          loading: 'lazy',
+          widths: image_widths,
+          sizes: image_sizes,
+          class: 'hero-marquee__media'
+      }}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'hero-marquee__media placeholder-svg' }}
+    {%- endif -%}
+  {%- elsif block.type == 'video' -%}
+    {%- if block.settings.video != blank -%}
+      {{
+        block.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          playsinline: true,
+          class: 'hero-marquee__media'
+      }}
+    {%- elsif block.settings.video_url != blank -%}
+      {%- if block.settings.video_url.type == 'youtube' -%}
+        <iframe
+          src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?autoplay=1&mute=1&loop=1&playlist={{ block.settings.video_url.id }}&controls=0&showinfo=0"
+          class="hero-marquee__media hero-marquee__media--iframe"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      {%- elsif block.settings.video_url.type == 'vimeo' -%}
+        <iframe
+          src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}?autoplay=1&muted=1&loop=1&background=1"
+          class="hero-marquee__media hero-marquee__media--iframe"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      {%- endif -%}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'hero-marquee__media placeholder-svg' }}
+    {%- endif -%}
+  {%- endif -%}
+</div>
