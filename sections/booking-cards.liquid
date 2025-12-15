@@ -26,14 +26,13 @@
       {%- endif -%}
     </div>
 
-    {%- if section.blocks.size > 0 -%}
       <div class="booking-cards__grid booking-cards__grid--{{ section.blocks.size }}-items">
         {%- for block in section.blocks -%}
           <a
             href="{{ block.settings.link | default: '#' }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="booking-card"
+            class="booking-card booking-card--text-{{ block.settings.text_position | default: 'center' }}"
             {{ block.shopify_attributes }}
           >
             <div class="booking-card__image-wrapper">
@@ -60,7 +59,6 @@
           </a>
         {%- endfor -%}
       </div>
-    {%- endif -%}
   </div>
 </section>
 
@@ -145,6 +143,26 @@
           "id": "title",
           "default": "Book Now",
           "label": "Title"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "options": [
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center",
+          "label": "Text position"
         },
         {
           "type": "url",

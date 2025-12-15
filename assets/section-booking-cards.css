@@ -56,6 +56,7 @@
   /* 2 cards stay at 2 columns */
   .booking-cards__grid--2-items {
     grid-template-columns: repeat(2, 1fr);
+    width: 100%;
     max-width: 80rem;
     margin: 0 auto;
   }
@@ -63,6 +64,7 @@
   /* 1 card centers */
   .booking-cards__grid--1-items {
     grid-template-columns: 1fr;
+    width: 100%;
     max-width: 40rem;
     margin: 0 auto;
   }
@@ -124,11 +126,47 @@
 /* Card Content */
 .booking-card__content {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
   padding: 2rem;
   text-align: center;
+}
+
+/* Text position variants */
+.booking-card--text-top .booking-card__content {
+  top: 0;
+}
+
+.booking-card--text-center .booking-card__content {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.booking-card--text-bottom .booking-card__content {
+  bottom: 0;
+}
+
+/* Overlay adjusts for text position */
+.booking-card--text-top .booking-card__overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 40%,
+    transparent 70%
+  );
+}
+
+.booking-card--text-center .booking-card__overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.booking-card--text-bottom .booking-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 40%,
+    transparent 70%
+  );
 }
 
 .booking-card__title {
