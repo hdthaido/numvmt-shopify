@@ -1,0 +1,197 @@
+{{ 'section-services-carousel.css' | asset_url | stylesheet_tag }}
+
+<section class="services-carousel section-{{ section.id }} color-{{ section.settings.color_scheme }}">
+  <div class="services-carousel__container page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="services-carousel__heading {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  <div class="services-carousel__swiper-wrapper">
+    <div class="swiper services-swiper page-width">
+      <div class="swiper-wrapper">
+        {%- for block in section.blocks -%}
+          <div class="swiper-slide" {{ block.shopify_attributes }}>
+            <div class="service-card">
+              <div class="service-card__image-wrapper">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 600
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 400, 500, 600',
+                      sizes: '(max-width: 749px) 80vw, 300px',
+                      class: 'service-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'service-card__image placeholder-svg' }}
+                {%- endif -%}
+              </div>
+              <div class="service-card__content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="service-card__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <div class="service-card__description rte">
+                    {{ block.settings.description }}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="services-carousel__utility page-width">
+      <div class="services-scrollbar swiper-scrollbar"></div>
+      <div class="services-arrows">
+        <button class="services-arrow services-arrow--prev" aria-label="Previous slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12.1113 17.4545L10.8815 16.2099L14.1097 12.9145H6.54547V11.0855H14.1097L10.8815 7.79541L12.1113 6.54541L17.4546 12L12.1113 17.4545Z"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.18182 12C2.18182 17.4224 6.57757 21.8182 12 21.8182C17.4224 21.8182 21.8182 17.4224 21.8182 12C21.8182 6.57757 17.4224 2.18182 12 2.18182C6.57757 2.18182 2.18182 6.57757 2.18182 12ZM12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0Z"></path>
+          </svg>
+        </button>
+        <button class="services-arrow services-arrow--next" aria-label="Next slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12.1113 17.4545L10.8815 16.2099L14.1097 12.9145H6.54547V11.0855H14.1097L10.8815 7.79541L12.1113 6.54541L17.4546 12L12.1113 17.4545Z"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.18182 12C2.18182 17.4224 6.57757 21.8182 12 21.8182C17.4224 21.8182 21.8182 17.4224 21.8182 12C21.8182 6.57757 17.4224 2.18182 12 2.18182C6.57757 2.18182 2.18182 6.57757 2.18182 12ZM12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    new Swiper('.services-swiper', {
+      slidesPerView: 1.25,
+      spaceBetween: 16,
+      scrollbar: {
+        el: '.services-scrollbar',
+        draggable: true,
+      },
+      navigation: {
+        nextEl: '.services-arrow--next',
+        prevEl: '.services-arrow--prev',
+      },
+      breakpoints: {
+        768: {
+          slidesPerView: 2.75,
+          spaceBetween: 24,
+        }
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Services Carousel",
+  "tag": "section",
+  "class": "section-services-carousel",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "<em>SERVICES</em>",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Physiotherapy",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Services Carousel",
+      "blocks": [
+        {
+          "type": "service",
+          "settings": {
+            "title": "Physiotherapy"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Chiropractic"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Massage Therapy"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Acupuncture"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

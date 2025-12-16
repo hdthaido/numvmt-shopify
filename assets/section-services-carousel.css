@@ -1,0 +1,181 @@
+/* Services Carousel Section */
+
+/* Swiper base styles (minimal required) */
+.swiper {
+  overflow: visible;
+}
+
+.swiper-wrapper {
+  display: flex;
+}
+
+.swiper-slide {
+  flex-shrink: 0;
+}
+
+/* Section */
+.services-carousel {
+  padding: 4rem 0;
+  overflow: clip;
+}
+
+.services-carousel__heading {
+  margin: 0 0 2rem;
+  text-align: center;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+/* Swiper wrapper - aligns with page-width gutters */
+/* .services-carousel__swiper-wrapper {
+  width: 100%;
+}
+
+.services-carousel__swiper-wrapper .services-swiper {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .services-carousel__swiper-wrapper .services-swiper {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .services-carousel__swiper-wrapper .services-swiper {
+    padding-left: max(5rem, calc((100% - var(--page-width, 120rem)) / 2 + 5rem));
+    padding-right: max(5rem, calc((100% - var(--page-width, 120rem)) / 2 + 5rem));
+  } */
+/* } */
+
+@media screen and (min-width: 750px) {
+  .services-carousel {
+    padding: 6rem 0;
+  }
+  
+  .services-carousel__heading {
+    margin-bottom: 3rem;
+  }
+}
+
+/* Service Card */
+.service-card {
+  background-color: rgb(var(--color-background));
+  border: 2px solid #FF0000;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 316 / 455;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.service-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+
+.service-card__image.placeholder-svg {
+  background-color: rgba(var(--color-foreground), 0.05);
+  border-radius: 20px;
+  height: 100%;
+}
+
+/* Copy takes remaining 255/455 (~56.04%) of the card height */
+.service-card__content {
+  flex: 1 1 calc(255 / 455 * 100%);
+  padding: 2rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.service-card__title {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.service-card__description {
+  line-height: 1.4;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.service-card__description p {
+  margin: 0;
+}
+
+/* Utility bar (scrollbar + arrows) */
+.services-carousel__utility {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Scrollbar */
+.services-scrollbar {
+  flex: 1;
+  height: 0.5rem;
+  background-color: rgba(255, 0, 0, 0.25);
+  border-radius: 20px;
+}
+
+.services-scrollbar .swiper-scrollbar-drag {
+  background: #FF0000;
+  border-radius: 20px;
+  height: 100%;
+}
+
+/* Arrows */
+.services-arrows {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.services-arrow {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #FF0000;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.services-arrow:hover {
+  opacity: 0.7;
+}
+
+.services-arrow[disabled],
+.services-arrow.swiper-button-disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.services-arrow--prev {
+  transform: rotate(180deg);
+}
+
+.services-arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media screen and (min-width: 990px) {
+  .services-carousel__utility {
+    margin-top: 2.5rem;
+  }
+}
