@@ -1,0 +1,195 @@
+{{ 'section-inner-page-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }} .inner-page-hero__media {
+    height: {{ section.settings.mobile_height }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }} .inner-page-hero__media {
+      height: {{ section.settings.desktop_height }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="inner-page-hero section-{{ section.id }}">
+  <div class="inner-page-hero__media">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 1920
+        | image_tag:
+          loading: 'eager',
+          widths: '375, 750, 1100, 1500, 1920',
+          sizes: '100vw',
+          class: 'inner-page-hero__image'
+      }}
+    {%- else -%}
+      <div class="inner-page-hero__placeholder">
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Overlay for better text readability {%- endcomment -%}
+    <div class="inner-page-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+
+    <div class="inner-page-hero__content page-width">
+      {%- if section.settings.heading != blank -%}
+        <h1 class="inner-page-hero__heading {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <div class="inner-page-hero__description rte">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label_1 != blank or section.settings.button_label_2 != blank -%}
+        <div class="inner-page-hero__buttons">
+          {%- if section.settings.button_label_1 != blank -%}
+            <a
+              href="{{ section.settings.button_link_1 }}"
+              class="inner-page-hero__button inner-page-hero__button--primary button"
+              {% if section.settings.button_link_1_new_tab %}target="_blank" rel="noopener"{% endif %}
+            >
+              {{ section.settings.button_label_1 }}
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.button_label_2 != blank -%}
+            <a
+              href="{{ section.settings.button_link_2 }}"
+              class="inner-page-hero__button inner-page-hero__button--secondary button button--secondary"
+              {% if section.settings.button_link_2_new_tab %}target="_blank" rel="noopener"{% endif %}
+            >
+              {{ section.settings.button_label_2 }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Inner Page Hero",
+  "tag": "section",
+  "class": "section-inner-page-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 150,
+      "max": 500,
+      "step": 25,
+      "unit": "px",
+      "label": "Mobile height",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<em>FAQ</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra Large" }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Button 1"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_link_1_new_tab",
+      "label": "Open in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button 2"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_link_2_new_tab",
+      "label": "Open in new tab",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inner Page Hero"
+    }
+  ]
+}
+{% endschema %}
