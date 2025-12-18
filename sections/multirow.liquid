@@ -12,6 +12,16 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .section-{{ section.id }} .multirow__heading {
+    margin-bottom: {{ section.settings.heading_spacing | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }} .multirow__heading {
+      margin-bottom: {{ section.settings.heading_spacing }}px;
+    }
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -44,6 +54,11 @@
 
 <div class="multirow section-{{ section.id }}-padding gradient color-{{ section.settings.section_color_scheme }}">
   <div class="multirow__inner page-width">
+    {%- if section.settings.section_heading != blank -%}
+      <h2 class="multirow__heading {{ section.settings.section_heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.section_heading }}
+      </h2>
+    {%- endif -%}
     {%- for block in section.blocks -%}
       <div
         class="image-with-text isolate{{ borders_class }}{{ corners_class }}{{ padding_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -115,6 +130,37 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_size",
+      "options": [
+        { "value": "h3", "label": "Small" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Spacing below heading",
+      "default": 40
+    },
     {
       "type": "header",
       "content": "t:sections.multirow.settings.header.content"
