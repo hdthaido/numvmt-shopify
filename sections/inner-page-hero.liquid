@@ -40,7 +40,7 @@
       </h1>
 
       {%- comment -%} Content from page.content {%- endcomment -%}
-      {%- if page.content != blank -%}
+      {%- if section.settings.show_page_content and page.content != blank -%}
         <div class="inner-page-hero__description rte">
           {{ page.content }}
         </div>
@@ -120,7 +120,7 @@
     },
     {
       "type": "header",
-      "content": "Title Style"
+      "content": "Content"
     },
     {
       "type": "select",
@@ -133,6 +133,12 @@
       ],
       "default": "h0",
       "label": "Heading size"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_page_content",
+      "label": "Show page content in hero",
+      "default": true
     },
     {
       "type": "header",
