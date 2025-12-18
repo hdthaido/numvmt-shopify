@@ -1,0 +1,130 @@
+/* Accordion Section */
+
+.accordion__heading {
+  margin: 0 0 1rem;
+}
+
+.accordion__description {
+  margin-bottom: 2rem;
+}
+
+.accordion__description p {
+  margin: 0;
+}
+
+/* Accordion List */
+.accordion__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Accordion Item - uses native <details> for accessibility */
+.accordion__item {
+  background-color: #F9F6F1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Trigger/Summary */
+.accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+/* Remove default marker in Safari */
+.accordion__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.accordion__trigger::marker {
+  display: none;
+  content: '';
+}
+
+.accordion__title {
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-align: left;
+  flex: 1;
+}
+
+@media screen and (min-width: 750px) {
+  .accordion__title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Icon */
+.accordion__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  border-radius: 50%;
+}
+
+.accordion__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Show/hide icons based on open state */
+.accordion__icon-close {
+  display: none;
+}
+
+.accordion__item[open] .accordion__icon-plus {
+  display: none;
+}
+
+.accordion__item[open] .accordion__icon-close {
+  display: block;
+}
+
+/* Content */
+.accordion__content {
+  overflow: hidden;
+}
+
+.accordion__content-inner {
+  padding: 0 2rem 1.5rem;
+}
+
+.accordion__content-inner p {
+  margin: 0;
+}
+
+.accordion__content-inner p + p {
+  margin-top: 1rem;
+}
+
+/* Animation for open/close */
+.accordion__item {
+  transition: background-color 0.2s ease;
+}
+
+.accordion__trigger:hover {
+  opacity: 0.8;
+}
+
+/* Focus styles for accessibility */
+.accordion__trigger:focus {
+  outline: none;
+}
+
+.accordion__trigger:focus-visible {
+  outline: 2px solid rgb(var(--color-foreground));
+  outline-offset: -2px;
+}

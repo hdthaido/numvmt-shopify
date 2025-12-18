@@ -42,10 +42,11 @@
   pointer-events: none;
 }
 
-/* Content */
+/* Content - inherits page-width from class */
 .inner-page-hero__content {
   position: relative;
   z-index: 2;
+  width: 100%;
   padding-top: 3rem;
   padding-bottom: 3rem;
   text-align: left;
