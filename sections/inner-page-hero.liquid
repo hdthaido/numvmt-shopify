@@ -34,15 +34,15 @@
     <div class="inner-page-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
 
     <div class="inner-page-hero__content page-width">
-      {%- if section.settings.heading != blank -%}
-        <h1 class="inner-page-hero__heading {{ section.settings.heading_size }}">
-          {{ section.settings.heading }}
-        </h1>
-      {%- endif -%}
+      {%- comment -%} Title from page.title {%- endcomment -%}
+      <h1 class="inner-page-hero__heading {{ section.settings.heading_size }}">
+        {{ page.title }}
+      </h1>
 
-      {%- if section.settings.description != blank -%}
+      {%- comment -%} Content from page.content {%- endcomment -%}
+      {%- if page.content != blank -%}
         <div class="inner-page-hero__description rte">
-          {{ section.settings.description }}
+          {{ page.content }}
         </div>
       {%- endif -%}
 
@@ -120,13 +120,7 @@
     },
     {
       "type": "header",
-      "content": "Content"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "Heading",
-      "default": "<em>FAQ</em>"
+      "content": "Title Style"
     },
     {
       "type": "select",
@@ -139,11 +133,6 @@
       ],
       "default": "h0",
       "label": "Heading size"
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description"
     },
     {
       "type": "header",
