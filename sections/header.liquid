@@ -74,6 +74,48 @@
       padding-top: 0.5rem;
     }
   }
+
+  /* Center navigation layout */
+  @media screen and (min-width: 990px) {
+    .header--middle-left.header--has-menu {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+
+    .header--middle-left.header--has-menu .header__heading {
+      justify-self: start;
+    }
+
+    .header--middle-left.header--has-menu .header__inline-menu {
+      justify-self: center;
+    }
+
+    .header--middle-left.header--has-menu .header__icons {
+      justify-self: end;
+    }
+  }
+
+  /* Header CTA button */
+  .header__cta-button {
+    margin-left: 1rem;
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    white-space: nowrap;
+    background-color: #D52039;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+  }
+
+  .header__cta-button:hover {
+    background-color: #b81c31;
+  }
+
+  /* Social icon styling */
+  .header__icon--social {
+    margin-right: 0.5rem;
+  }
 </style>
 
 {%- style -%}
@@ -247,9 +289,11 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+      {%- if section.settings.show_search_icon -%}
+        {% render 'header-search', input_id: 'Search-In-Modal' %}
+      {%- endif -%}
 
-      {%- if shop.customer_accounts_enabled -%}
+      {%- if section.settings.show_account_icon and shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
           class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
@@ -285,7 +329,14 @@
         {%- endcase -%}
       {%- endfor -%}
 
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+      {%- if section.settings.show_instagram_icon and settings.social_instagram_link != blank -%}
+        <a href="{{ settings.social_instagram_link }}" class="header__icon header__icon--social link focus-inset" target="_blank" rel="noopener" aria-label="Instagram">
+          <span class="svg-wrapper">{{ 'icon-instagram.svg' | inline_asset_content }}</span>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.show_cart_icon -%}
+        <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
         {% if cart == empty %}
           <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
         {% else %}
@@ -300,7 +351,18 @@
             <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
           </div>
         {%- endif -%}
-      </a>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.header_button_label != blank -%}
+        <a
+          href="{{ section.settings.header_button_link }}"
+          class="header__cta-button button button--primary"
+          {% if section.settings.header_button_new_tab %}target="_blank" rel="noopener"{% endif %}
+        >
+          {{ section.settings.header_button_label }}
+        </a>
+      {%- endif -%}
     </div>
   </header>
 </{{ header_tag }}>
@@ -588,6 +650,51 @@
     {
       "type": "header",
       "content": "t:sections.header.settings.header__utilities.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search_icon",
+      "default": true,
+      "label": "Show search icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_icon",
+      "default": true,
+      "label": "Show account icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_icon",
+      "default": true,
+      "label": "Show cart icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_instagram_icon",
+      "default": false,
+      "label": "Show Instagram icon",
+      "info": "Uses Instagram link from Theme Settings → Social media"
+    },
+    {
+      "type": "header",
+      "content": "Header button"
+    },
+    {
+      "type": "text",
+      "id": "header_button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "header_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_button_new_tab",
+      "default": false,
+      "label": "Open in new tab"
     },
     {
       "type": "checkbox",
