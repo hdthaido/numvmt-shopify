@@ -1,0 +1,75 @@
+/* Marquee Section */
+
+.marquee-section {
+  overflow: hidden;
+}
+
+.marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Track - contains all items and animates */
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee-scroll 20s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Pause animation when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation-play-state: paused;
+  }
+}
+
+/* Individual item */
+.marquee__item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Image wrapper */
+.marquee__image-wrapper {
+  width: var(--image-width, 150px);
+  flex-shrink: 0;
+}
+
+.marquee__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.marquee__image.placeholder-svg {
+  background-color: rgba(var(--color-foreground), 0.05);
+  border-radius: 10px;
+  aspect-ratio: 1 / 1;
+}
+
+/* Text */
+.marquee__text {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* Image + Text combo */
+.marquee__image-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
