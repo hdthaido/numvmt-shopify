@@ -1,0 +1,254 @@
+{{ 'section-skillsets-carousel.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .section-{{ section.id }} .skillsets-carousel__heading {
+    font-family: {{ section.settings.heading_font.family }}, {{ section.settings.heading_font.fallback_families }};
+    font-weight: {{ section.settings.heading_font.weight }};
+    font-style: {{ section.settings.heading_font.style }};
+  }
+{%- endstyle -%}
+
+<section class="skillsets-carousel section-{{ section.id }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="skillsets-carousel__wrapper page-width">
+    {%- comment -%} Left Side - Text Content {%- endcomment -%}
+    <div class="skillsets-carousel__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="skillsets-carousel__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <div class="skillsets-carousel__text-swiper swiper skillsets-text-swiper">
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h2 class="skillsets-carousel__heading {{ section.settings.heading_size }}">
+                  {{ block.settings.heading }}
+                </h2>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <div class="skillsets-carousel__description rte">
+                  {{ block.settings.description }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="skillsets-carousel__nav">
+        <button class="skillsets-nav skillsets-nav--prev" aria-label="Previous slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12.1113 17.4545L10.8815 16.2099L14.1097 12.9145H6.54547V11.0855H14.1097L10.8815 7.79541L12.1113 6.54541L17.4546 12L12.1113 17.4545Z"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.18182 12C2.18182 17.4224 6.57757 21.8182 12 21.8182C17.4224 21.8182 21.8182 17.4224 21.8182 12C21.8182 6.57757 17.4224 2.18182 12 2.18182C6.57757 2.18182 2.18182 6.57757 2.18182 12ZM12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0Z"></path>
+          </svg>
+        </button>
+        <button class="skillsets-nav skillsets-nav--next" aria-label="Next slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12.1113 17.4545L10.8815 16.2099L14.1097 12.9145H6.54547V11.0855H14.1097L10.8815 7.79541L12.1113 6.54541L17.4546 12L12.1113 17.4545Z"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.18182 12C2.18182 17.4224 6.57757 21.8182 12 21.8182C17.4224 21.8182 21.8182 17.4224 21.8182 12C21.8182 6.57757 17.4224 2.18182 12 2.18182C6.57757 2.18182 2.18182 6.57757 2.18182 12ZM12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} Right Side - Cards Swiper {%- endcomment -%}
+    <div class="skillsets-carousel__cards">
+      <div class="swiper skillsets-cards-swiper">
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            <div class="swiper-slide skillsets-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '300, 400, 500, 600, 800',
+                    sizes: '(max-width: 749px) 80vw, 400px',
+                    class: 'skillsets-card__image'
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'skillsets-card__image placeholder-svg' }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Cards swiper with effect
+    const cardsSwiper = new Swiper('.skillsets-cards-swiper', {
+      effect: 'cards',
+      grabCursor: true,
+      loop: true,
+      cardsEffect: {
+        perSlideOffset: 8,
+        perSlideRotate: 2,
+        rotate: true,
+        slideShadows: false
+      }
+    });
+
+    // Text swiper synced with cards
+    const textSwiper = new Swiper('.skillsets-text-swiper', {
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+      allowTouchMove: false,
+      loop: true
+    });
+
+    // Sync swipers
+    cardsSwiper.on('slideChange', function() {
+      textSwiper.slideTo(cardsSwiper.realIndex);
+    });
+
+    // Navigation buttons
+    document.querySelector('.skillsets-nav--prev').addEventListener('click', function() {
+      cardsSwiper.slidePrev();
+    });
+
+    document.querySelector('.skillsets-nav--next').addEventListener('click', function() {
+      cardsSwiper.slideNext();
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Skillsets Carousel",
+  "tag": "section",
+  "class": "section-skillsets-carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our Skillsets"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h3", "label": "Small" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "assistant_n7"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "skillset",
+      "name": "Skillset",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<em>Physiotherapy</em>"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Skillsets Carousel",
+      "blocks": [
+        {
+          "type": "skillset",
+          "settings": {
+            "heading": "<em>Physiotherapy</em>"
+          }
+        },
+        {
+          "type": "skillset",
+          "settings": {
+            "heading": "<em>Chiropractic</em>"
+          }
+        },
+        {
+          "type": "skillset",
+          "settings": {
+            "heading": "<em>Massage Therapy</em>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

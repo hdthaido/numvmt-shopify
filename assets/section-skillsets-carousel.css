@@ -1,0 +1,149 @@
+/* Skillsets Carousel Section */
+
+.skillsets-carousel {
+  overflow: hidden;
+}
+
+.skillsets-carousel__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+@media screen and (min-width: 990px) {
+  .skillsets-carousel__wrapper {
+    flex-direction: row;
+    align-items: center;
+    gap: 6rem;
+  }
+
+  .skillsets-carousel__content {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .skillsets-carousel__cards {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Text Content */
+.skillsets-carousel__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.skillsets-carousel__heading {
+  margin: 0 0 1.5rem;
+  font-style: italic;
+  font-weight: 900;
+}
+
+.skillsets-carousel__description {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.skillsets-carousel__description p {
+  margin: 0;
+}
+
+/* Text Swiper */
+.skillsets-text-swiper {
+  overflow: hidden;
+}
+
+.skillsets-text-swiper .swiper-slide {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+}
+
+.skillsets-text-swiper .swiper-slide-active {
+  opacity: 1 !important;
+}
+
+/* Navigation */
+.skillsets-carousel__nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.skillsets-nav {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: #D52039;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.skillsets-nav:hover {
+  opacity: 0.7;
+}
+
+.skillsets-nav--prev {
+  transform: rotate(180deg);
+}
+
+.skillsets-nav svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cards Swiper */
+.skillsets-cards-swiper {
+  width: 280px;
+  height: 380px;
+  padding: 20px;
+}
+
+@media screen and (min-width: 750px) {
+  .skillsets-cards-swiper {
+    width: 320px;
+    height: 420px;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .skillsets-cards-swiper {
+    width: 350px;
+    height: 460px;
+  }
+}
+
+/* Card Slide */
+.skillsets-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgb(var(--color-background));
+}
+
+.skillsets-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.skillsets-card__image.placeholder-svg {
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+/* Swiper cards effect overrides */
+.skillsets-cards-swiper .swiper-slide {
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
