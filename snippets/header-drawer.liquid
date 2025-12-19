@@ -195,6 +195,18 @@
                 {%- endif -%}
               </div>
             {%- endif -%}
+            
+            {%- if section.settings.header_button_label != blank -%}
+              <a
+                href="{{ section.settings.header_button_link }}"
+                class="menu-drawer__cta-button button"
+                {% if section.settings.header_button_new_tab %}target="_blank" rel="noopener"{% endif %}
+                style="display: block; background-color: #D52039; color: #fff; border-radius: 10px; padding: 1.2rem 2.5rem; text-decoration: none; font-weight: 600; text-align: center; border: none; box-shadow: none;"
+              >
+                {{ section.settings.header_button_label }}
+              </a>
+            {%- endif -%}
+
             <ul class="list list-social list-unstyled" role="list">
               {%- if settings.social_twitter_link != blank -%}
                 <li class="list-social__item">

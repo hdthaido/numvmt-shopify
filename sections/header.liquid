@@ -116,6 +116,28 @@
   .header__icon--social {
     margin-right: 0.5rem;
   }
+
+  /* Mobile: hide social icon and CTA button */
+  @media screen and (max-width: 767px) {
+    .header__icon--social,
+    .header__cta-button {
+      display: none;
+    }
+
+    .header__icons {
+      padding-right: 0;
+    }
+  }
+
+  /* Hide account link in mobile drawer */
+  .menu-drawer__account {
+    display: none;
+  }
+
+  /* Remove ::after border on drawer CTA button */
+  .menu-drawer__cta-button::after {
+    display: none;
+  }
 </style>
 
 {%- style -%}
