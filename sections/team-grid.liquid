@@ -16,22 +16,141 @@
 
 <section class="team-grid-section section-{{ section.id }} section-{{ section.id }}-padding">
   <div class="page-width">
-    <article class="gallery">
+    <article class="gallery" id="team-gallery-{{ section.id }}">
       {%- for block in section.blocks -%}
         {%- if block.settings.image != blank -%}
-          {{
-            block.settings.image
-            | image_url: width: 400
-            | image_tag:
-              loading: 'lazy',
-              widths: '200, 300, 400'
-          }}
+          <img 
+            src="{{ block.settings.image | image_url: width: 400 }}"
+            srcset="{{ block.settings.image | image_url: width: 200 }} 200w, {{ block.settings.image | image_url: width: 300 }} 300w, {{ block.settings.image | image_url: width: 400 }} 400w"
+            loading="lazy"
+            alt="{{ block.settings.name | escape }}"
+            data-lightbox-trigger
+            data-index="{{ forloop.index0 }}"
+          />
         {%- else -%}
-          <img src="https://assets.codepen.io/1506195/unsplash-music-0.avif" alt="placeholder" />
+          <img 
+            src="https://assets.codepen.io/1506195/unsplash-music-0.avif" 
+            alt="placeholder"
+            data-lightbox-trigger
+            data-index="{{ forloop.index0 }}"
+          />
         {%- endif -%}
       {%- endfor -%}
     </article>
   </div>
+
+  {%- comment -%} Lightbox Modal {%- endcomment -%}
+  <div class="team-lightbox" id="team-lightbox-{{ section.id }}" aria-hidden="true">
+    <div class="team-lightbox__backdrop"></div>
+    <div class="team-lightbox__content">
+      <div class="team-lightbox__card">
+        <button class="team-lightbox__close" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="team-lightbox__left">
+          <div class="team-lightbox__image-wrapper">
+            <img class="team-lightbox__image" src="" alt="" />
+          </div>
+          <div class="team-lightbox__info">
+            <p class="team-lightbox__role"></p>
+            <h3 class="team-lightbox__name"></h3>
+          </div>
+        </div>
+        <div class="team-lightbox__right">
+          <div class="team-lightbox__bio rte"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Store team member data for JS {%- endcomment -%}
+  <script type="application/json" id="team-data-{{ section.id }}">
+    [
+      {%- for block in section.blocks -%}
+        {
+          "image": "{{ block.settings.image | image_url: width: 600 | escape }}",
+          "name": {{ block.settings.name | json }},
+          "role": {{ block.settings.title | json }},
+          "bio": {{ block.settings.bio | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+
+  <script>
+    (function() {
+      const sectionId = '{{ section.id }}';
+      const gallery = document.getElementById('team-gallery-' + sectionId);
+      const lightbox = document.getElementById('team-lightbox-' + sectionId);
+      const dataEl = document.getElementById('team-data-' + sectionId);
+      
+      if (!gallery || !lightbox || !dataEl) return;
+      
+      const teamData = JSON.parse(dataEl.textContent);
+      const backdrop = lightbox.querySelector('.team-lightbox__backdrop');
+      const closeBtn = lightbox.querySelector('.team-lightbox__close');
+      const imageEl = lightbox.querySelector('.team-lightbox__image');
+      const nameEl = lightbox.querySelector('.team-lightbox__name');
+      const roleEl = lightbox.querySelector('.team-lightbox__role');
+      const bioEl = lightbox.querySelector('.team-lightbox__bio');
+
+      function openLightbox(index) {
+        const member = teamData[index];
+        if (!member) return;
+
+        // Clear previous image immediately
+        imageEl.src = '';
+        imageEl.style.opacity = '0';
+        
+        // Set new content
+        nameEl.textContent = member.name;
+        roleEl.textContent = member.role;
+        bioEl.innerHTML = member.bio || '';
+
+        // Load new image
+        const newImage = new Image();
+        newImage.onload = function() {
+          imageEl.src = member.image;
+          imageEl.alt = member.name;
+          imageEl.style.opacity = '1';
+        };
+        newImage.src = member.image;
+
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      // Click on image to open
+      gallery.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-lightbox-trigger]');
+        if (trigger) {
+          const index = parseInt(trigger.dataset.index, 10);
+          openLightbox(index);
+        }
+      });
+
+      // Close handlers
+      closeBtn.addEventListener('click', closeLightbox);
+      backdrop.addEventListener('click', closeLightbox);
+      
+      // ESC key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+          closeLightbox();
+        }
+      });
+    })();
+  </script>
 </section>
 
 {% schema %}
