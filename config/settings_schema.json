@@ -143,6 +143,42 @@
         "unit": "%",
         "label": "t:settings_schema.typography.settings.body_scale.label",
         "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Custom fonts"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_custom_heading_font",
+        "label": "Use custom heading font",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "custom_heading_font",
+        "label": "Custom heading font",
+        "options": [
+          { "value": "Be Vietnam Pro", "label": "Be Vietnam Pro" }
+        ],
+        "default": "Be Vietnam Pro",
+        "info": "Enable 'Use custom heading font' to apply"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_custom_body_font",
+        "label": "Use custom body font",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "custom_body_font",
+        "label": "Custom body font",
+        "options": [
+          { "value": "Be Vietnam Pro", "label": "Be Vietnam Pro" }
+        ],
+        "default": "Be Vietnam Pro",
+        "info": "Enable 'Use custom body font' to apply"
       }
     ]
   },
