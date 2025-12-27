@@ -14,30 +14,52 @@
   }
 {%- endstyle -%}
 
-{%- comment -%} Collect unique roles for filter {%- endcomment -%}
-{%- assign roles = '' -%}
-{%- for block in section.blocks -%}
-  {%- if block.settings.title != blank -%}
-    {%- assign roles = roles | append: block.settings.title | append: '|||' -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- assign roles_array = roles | split: '|||' | uniq -%}
+{%- comment -%} Build filter list - either custom or auto from roles {%- endcomment -%}
+{%- if section.settings.use_custom_filters and section.settings.custom_filters != blank -%}
+  {%- assign filters_array = section.settings.custom_filters | split: ',' -%}
+{%- else -%}
+  {%- assign roles = '' -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.title != blank -%}
+      {%- assign roles = roles | append: block.settings.title | append: '|||' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign filters_array = roles | split: '|||' | uniq -%}
+{%- endif -%}
 
 <section class="team-grid-section section-{{ section.id }} section-{{ section.id }}-padding">
   <div class="page-width">
-    {%- if section.settings.show_filter and roles_array.size > 1 -%}
+    {%- if section.settings.show_filter and filters_array.size > 0 -%}
       <div class="team-filter" id="team-filter-{{ section.id }}">
-        <button class="team-filter__btn is-active" data-filter="all">All</button>
-        {%- for role in roles_array -%}
-          {%- if role != '' -%}
-            <button class="team-filter__btn" data-filter="{{ role | handleize }}">{{ role }}</button>
-          {%- endif -%}
-        {%- endfor -%}
+        <select class="team-filter__select" aria-label="Filter by role">
+          <option value="all">All</option>
+          {%- for filter in filters_array -%}
+            {%- assign filter_clean = filter | strip -%}
+            {%- if filter_clean != '' -%}
+              <option value="{{ filter_clean | handleize }}">{{ filter_clean }}</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select>
       </div>
     {%- endif -%}
 
     <article class="gallery" id="team-gallery-{{ section.id }}">
       {%- for block in section.blocks -%}
+        {%- comment -%} Build comma-separated list of handleized categories {%- endcomment -%}
+        {%- if block.settings.filter_category != blank -%}
+          {%- assign categories = block.settings.filter_category | split: ',' -%}
+          {%- assign member_roles = '' -%}
+          {%- for cat in categories -%}
+            {%- assign cat_clean = cat | strip | handleize -%}
+            {%- if member_roles != '' -%}
+              {%- assign member_roles = member_roles | append: ',' -%}
+            {%- endif -%}
+            {%- assign member_roles = member_roles | append: cat_clean -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign member_roles = block.settings.title | handleize -%}
+        {%- endif -%}
+        
         {%- if block.settings.image != blank -%}
           <img 
             src="{{ block.settings.image | image_url: width: 400 }}"
@@ -46,7 +68,7 @@
             alt="{{ block.settings.name | escape }}"
             data-lightbox-trigger
             data-index="{{ forloop.index0 }}"
-            data-role="{{ block.settings.title | handleize }}"
+            data-roles="{{ member_roles }}"
           />
         {%- else -%}
           <img 
@@ -54,7 +76,7 @@
             alt="placeholder"
             data-lightbox-trigger
             data-index="{{ forloop.index0 }}"
-            data-role="{{ block.settings.title | handleize }}"
+            data-roles="{{ member_roles }}"
           />
         {%- endif -%}
       {%- endfor -%}
@@ -175,29 +197,64 @@
       // Filter functionality
       const filterContainer = document.getElementById('team-filter-' + sectionId);
       if (filterContainer) {
-        const filterBtns = filterContainer.querySelectorAll('.team-filter__btn');
+        const filterSelect = filterContainer.querySelector('.team-filter__select');
         const images = gallery.querySelectorAll('img');
 
-        filterBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const filter = btn.dataset.filter;
-
-            // Update active button
-            filterBtns.forEach(b => b.classList.remove('is-active'));
-            btn.classList.add('is-active');
-
-            // Filter images
-            images.forEach(img => {
-              if (filter === 'all' || img.dataset.role === filter) {
-                img.style.display = '';
-                img.style.opacity = '1';
-              } else {
-                img.style.display = 'none';
-                img.style.opacity = '0';
-              }
-            });
+        function updateLayout() {
+          // Get visible images and apply staggered layout
+          const visibleImages = Array.from(images).filter(img => img.style.display !== 'none');
+          
+          // Reset all grid-column styles first
+          images.forEach(img => {
+            img.style.gridColumn = '';
           });
+
+          // Only apply stagger on desktop (> 480px)
+          if (window.innerWidth <= 480) {
+            visibleImages.forEach(img => {
+              img.style.gridColumn = 'span 1';
+            });
+            return;
+          }
+
+          // Apply staggered offset pattern to visible items
+          // Pattern: items 4, 9, 14... (every 5th starting from 4th)
+          visibleImages.forEach((img, index) => {
+            const position = index + 1; // 1-based
+            if ((position - 4) % 5 === 0 && position >= 4) {
+              img.style.gridColumn = '2 / span 2';
+            } else {
+              img.style.gridColumn = 'span 2';
+            }
+          });
+        }
+
+        // Re-run layout on resize
+        window.addEventListener('resize', updateLayout);
+
+        filterSelect.addEventListener('change', () => {
+          const filter = filterSelect.value;
+
+          // Filter images - check if any of the member's roles match
+          images.forEach(img => {
+            const roles = (img.dataset.roles || '').split(',');
+            const matches = filter === 'all' || roles.includes(filter);
+            
+            if (matches) {
+              img.style.display = '';
+              img.style.opacity = '1';
+            } else {
+              img.style.display = 'none';
+              img.style.opacity = '0';
+            }
+          });
+
+          // Recalculate layout for visible items
+          updateLayout();
         });
+
+        // Initial layout
+        updateLayout();
       }
     })();
   </script>
@@ -212,8 +269,22 @@
     {
       "type": "checkbox",
       "id": "show_filter",
-      "label": "Show role filter",
+      "label": "Show filter",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_filters",
+      "label": "Use custom filter names",
+      "default": false,
+      "info": "When enabled, uses custom filter names instead of auto-generating from roles"
+    },
+    {
+      "type": "text",
+      "id": "custom_filters",
+      "label": "Custom filter names",
+      "info": "Comma-separated list (e.g., Physiotherapy, Chiropractic, Massage)",
+      "default": "Filter 1, Filter 2, Filter 3"
     },
     {
       "type": "header",
@@ -261,6 +332,12 @@
           "id": "title",
           "label": "Title/Role",
           "default": "Position"
+        },
+        {
+          "type": "text",
+          "id": "filter_category",
+          "label": "Filter category",
+          "info": "Use comma for multiple: 'Kinesiologist, Stretch Therapist'"
         },
         {
           "type": "richtext",

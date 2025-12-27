@@ -16,8 +16,8 @@
   .contact-wrapper {
     flex-direction: row;
     gap: 6rem;
-    align-items: flex-start;
-  }
+  align-items: flex-start;
+}
 
   .contact-info {
     flex: 1;
@@ -192,7 +192,7 @@
 .form-status--error {
   background-color: rgba(255, 0, 0, 0.1);
   color: red;
-}
+  }
 
 .form-status svg {
   flex-shrink: 0;
