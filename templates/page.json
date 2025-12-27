@@ -15,9 +15,115 @@
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "multirow_crbX4i": {
+      "type": "multirow",
+      "blocks": {
+        "row_AVbMH9": {
+          "type": "row",
+          "settings": {
+            "caption": "Caption",
+            "heading": "Row",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_label": "Button label",
+            "button_link": ""
+          }
+        },
+        "row_xkjVJK": {
+          "type": "row",
+          "settings": {
+            "caption": "Caption",
+            "heading": "Row",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_label": "Button label",
+            "button_link": ""
+          }
+        },
+        "row_mfVfVP": {
+          "type": "row",
+          "settings": {
+            "caption": "Caption",
+            "heading": "Row",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_label": "Button label",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "row_AVbMH9",
+        "row_xkjVJK",
+        "row_mfVfVP"
+      ],
+      "name": "t:sections.multirow.presets.name",
+      "settings": {
+        "section_heading": "",
+        "section_heading_size": "h1",
+        "heading_spacing": 40,
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "image_layout": "alternate-left",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "row_color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "services_carousel_VrJJfF": {
+      "type": "services-carousel",
+      "blocks": {
+        "service_7gtAe8": {
+          "type": "service",
+          "settings": {
+            "title": "Physiotherapy",
+            "description": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>"
+          }
+        },
+        "service_PCWAz9": {
+          "type": "service",
+          "settings": {
+            "title": "Chiropractic",
+            "description": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>"
+          }
+        },
+        "service_jYMQrg": {
+          "type": "service",
+          "settings": {
+            "title": "Massage Therapy",
+            "description": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>"
+          }
+        },
+        "service_RkTp8w": {
+          "type": "service",
+          "settings": {
+            "title": "Acupuncture",
+            "description": "<p>Our physiotherapy philosophy is focused on treating the cause, not just the symptoms. We embrace both the art and science of physio to gain insights into your physical health and to create, restore, and improve your movement.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "service_7gtAe8",
+        "service_PCWAz9",
+        "service_jYMQrg",
+        "service_RkTp8w"
+      ],
+      "name": "Services Carousel",
+      "settings": {
+        "heading": "<em>SERVICES</em>",
+        "heading_size": "h0",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "multirow_crbX4i",
+    "services_carousel_VrJJfF"
   ]
 }
