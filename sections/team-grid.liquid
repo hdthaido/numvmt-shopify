@@ -14,8 +14,28 @@
   }
 {%- endstyle -%}
 
+{%- comment -%} Collect unique roles for filter {%- endcomment -%}
+{%- assign roles = '' -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.title != blank -%}
+    {%- assign roles = roles | append: block.settings.title | append: '|||' -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign roles_array = roles | split: '|||' | uniq -%}
+
 <section class="team-grid-section section-{{ section.id }} section-{{ section.id }}-padding">
   <div class="page-width">
+    {%- if section.settings.show_filter and roles_array.size > 1 -%}
+      <div class="team-filter" id="team-filter-{{ section.id }}">
+        <button class="team-filter__btn is-active" data-filter="all">All</button>
+        {%- for role in roles_array -%}
+          {%- if role != '' -%}
+            <button class="team-filter__btn" data-filter="{{ role | handleize }}">{{ role }}</button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
     <article class="gallery" id="team-gallery-{{ section.id }}">
       {%- for block in section.blocks -%}
         {%- if block.settings.image != blank -%}
@@ -26,6 +46,7 @@
             alt="{{ block.settings.name | escape }}"
             data-lightbox-trigger
             data-index="{{ forloop.index0 }}"
+            data-role="{{ block.settings.title | handleize }}"
           />
         {%- else -%}
           <img 
@@ -33,6 +54,7 @@
             alt="placeholder"
             data-lightbox-trigger
             data-index="{{ forloop.index0 }}"
+            data-role="{{ block.settings.title | handleize }}"
           />
         {%- endif -%}
       {%- endfor -%}
@@ -149,6 +171,34 @@
           closeLightbox();
         }
       });
+
+      // Filter functionality
+      const filterContainer = document.getElementById('team-filter-' + sectionId);
+      if (filterContainer) {
+        const filterBtns = filterContainer.querySelectorAll('.team-filter__btn');
+        const images = gallery.querySelectorAll('img');
+
+        filterBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+
+            // Update active button
+            filterBtns.forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+
+            // Filter images
+            images.forEach(img => {
+              if (filter === 'all' || img.dataset.role === filter) {
+                img.style.display = '';
+                img.style.opacity = '1';
+              } else {
+                img.style.display = 'none';
+                img.style.opacity = '0';
+              }
+            });
+          });
+        });
+      }
     })();
   </script>
 </section>
@@ -159,6 +209,12 @@
   "tag": "section",
   "class": "section-team-grid",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_filter",
+      "label": "Show role filter",
+      "default": true
+    },
     {
       "type": "header",
       "content": "Padding"

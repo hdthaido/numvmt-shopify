@@ -506,3 +506,59 @@
     }
   }
 }
+
+/* =====================
+   CENTERED FOOTER LAYOUT
+   ===================== */
+
+.footer__content-top {
+  text-align: center;
+}
+
+.footer__blocks-wrapper.grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.footer-block.grid__item {
+  width: auto;
+  max-width: 100%;
+}
+
+.footer-block__brand-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-block--menu .footer-block__details-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2.5rem;
+}
+
+.footer-block--menu .footer-block__details-content li {
+  margin: 0;
+}
+
+.footer__list-social {
+  justify-content: center;
+}
+
+.footer-block--newsletter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__content-bottom-wrapper {
+  justify-content: center;
+}
+
+.footer__copyright {
+  text-align: center;
+  width: 100%;
+}
